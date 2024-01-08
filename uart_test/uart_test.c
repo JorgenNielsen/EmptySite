@@ -23,6 +23,7 @@ int main() {
 
     wiringXSerialPuts(fd, "Duo Serial Test\n");
 
+	printf("Duo UART started\n");
     while(1)
     {
         str_len = wiringXSerialDataAvail(fd);
