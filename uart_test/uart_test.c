@@ -3,6 +3,17 @@
 
 #include <wiringx.h>
 
+// git initgraph
+// create / change files
+// git add .
+// git commit -m "comment"
+// git push --set-upstream https://github.com/JorgenNielsen/EmptySite master
+
+// git clone https://github.com/JorgenNielsen/EmptySite  
+// root@46e322a49825:/workspace/jon-examples/EmptySite/uart_test# git pull origin master
+// make
+// scp uart_test root@192.168.42.1:/root/
+
 int main() {
     struct wiringXSerial_t wiringXSerial = {115200, 8, 'n', 1, 'n'};
     char buf[1024];
@@ -21,9 +32,21 @@ int main() {
         return -1;
     }
 
-    wiringXSerialPuts(fd, "Duo Serial Test\n");
+    wiringXSerialPuts(fd, "Duo Serial Test.\n");
 
 	printf("Duo UART started\n");
+	
+	char name[] = "foo.txt";
+    FILE * fp;
+    int fd = open(name, O_RDWR | O_CREAT, 0777);
+	if (fd != NULL) {
+		fp = fdopen(fd, "w");
+        fprintf(fp, "This file should be executable.\n");
+		printf("File write OK\n");
+	} else {
+		printf("File write error\n");
+	}
+	
     while(1)
     {
         str_len = wiringXSerialDataAvail(fd);
