@@ -45,6 +45,7 @@ int main() {
 	if (fd >= 0) {
 		fp = fdopen(fd, "w");
         fprintf(fp, "This file should be executable.\n");
+		fclose(fp);
 		printf("File write OK\n");
 	} else {
 		printf("File write error\n");
