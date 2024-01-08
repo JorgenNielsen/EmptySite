@@ -38,8 +38,8 @@ int main() {
 	
 	char name[] = "foo.txt";
     FILE * fp;
-    int fd = open(name, O_RDWR | O_CREAT, 0777);
-	if (fd != NULL) {
+    fd = open(name, O_RDWR | O_CREAT, 0777);
+	if (fd >= 0) {
 		fp = fdopen(fd, "w");
         fprintf(fp, "This file should be executable.\n");
 		printf("File write OK\n");
