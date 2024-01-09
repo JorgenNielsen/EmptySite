@@ -42,11 +42,25 @@ int main() {
 	char name[] = "foo.txt";
     FILE * fp;
     fd = open(name, O_RDWR | O_CREAT, 0777);
-	if (fd >= 0) {
+	if (fd != -1) {
 		fp = fdopen(fd, "w");
-        fprintf(fp, "This file should be executable.\n");
-		fclose(fp);
-		printf("File write OK\n");
+		if (fp!=NULL) {
+			fprintf(fp, "This file should be executable.\n");
+			fclose(fp);
+			printf("File write OK\n");
+		} else {
+			printf("File write open error\n");
+			fp = fopen("file.txt", "w");
+			if (fp != NULL)
+			{
+				fprintf(fp, "This file should be executable.\n");
+				fclose(fp);
+				printf("File write OK\n");
+				
+			} else {
+				printf("Error opening file!\n"); 
+			}
+		}
 	} else {
 		printf("File write error\n");
 	}
