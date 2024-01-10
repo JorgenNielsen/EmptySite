@@ -6,7 +6,7 @@
 
 #include <wiringx.h>
 
-// git initgraph
+// git init
 // create / change files
 // git add .
 // git commit -m "comment"
@@ -22,26 +22,26 @@ int main() {
     char buf[1024];
     int str_len = 0;
     int i;
-    int fd;
+    int cfd;
 
     if(wiringXSetup("duo", NULL) == -1) {
         wiringXGC();
         return -1;
     }
 
-    if ((fd = wiringXSerialOpen("/dev/ttyS4", wiringXSerial)) < 0) {
-        printf("Open serial device failed: %d\n", fd);
+    if ((cfd = wiringXSerialOpen("/dev/ttyS4", wiringXSerial)) < 0) {
+        printf("Open serial device failed: %d\n", cfd);
         wiringXGC();
         return -1;
     }
 
-    wiringXSerialPuts(fd, "Duo Serial Test.\n");
+    wiringXSerialPuts(cfd, "Duo Serial Test.\n");
 
 	printf("Duo UART started\n");
 	
 	char name[] = "foo.txt";
     FILE * fp;
-    fd = open(name, O_RDWR | O_CREAT, 0777);
+    int fd = open(name, O_RDWR | O_CREAT, 0777);
 	if (fd != -1) {
 		fp = fdopen(fd, "w");
 		if (fp!=NULL) {
@@ -67,18 +67,18 @@ int main() {
 	
     while(1)
     {
-        str_len = wiringXSerialDataAvail(fd);
+        str_len = wiringXSerialDataAvail(cfd);
         if (str_len > 0) {
             i = 0;
             while (str_len--)
             {
-                buf[i++] = wiringXSerialGetChar(fd);
+                buf[i++] = wiringXSerialGetChar(cfd);
             }
             printf("Duo UART receive: %s\n", buf);
         }
     }
 
-    wiringXSerialClose(fd);
+    wiringXSerialClose(cfd);
 
     return 0;
 }
