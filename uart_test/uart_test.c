@@ -7,6 +7,9 @@
 
 #include <unistd.h>
 
+#include <sys/stat.h>   // stat
+#include <stdbool.h>    // bool type
+
 #include <wiringx.h>
 
 // git init
@@ -45,6 +48,11 @@
 
 void fileCheck(const char *fileName);
 
+bool file_exists (char *filename) {
+  struct stat   buffer;   
+  return (stat (filename, &buffer) == 0);
+}
+
 int main() {
     struct wiringXSerial_t wiringXSerial = {115200, 8, 'n', 1, 'n'};
     char buf[1024];
@@ -70,6 +78,12 @@ int main() {
 	char name[] = "foo.txt";
 	
 	fileCheck(name);
+	
+	if (file_exists(name)) {
+        printf("%s exists\n", name);
+	} else {
+        printf("%s does not exist\n", name);
+	}
 	
     FILE * fp;
     int fd = open(name, O_RDWR | O_CREAT, 0777);
