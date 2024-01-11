@@ -5,6 +5,8 @@
 #include <fcntl.h>
 #include <string.h>
 
+#include <unistd.h>
+
 #include <wiringx.h>
 
 // git init
@@ -41,6 +43,8 @@
 	root@46e322a49825:/workspace/jon-examples/EmptySite/uart_test# git pull origin master
 */
 
+void fileCheck(const char *fileName);
+
 int main() {
     struct wiringXSerial_t wiringXSerial = {115200, 8, 'n', 1, 'n'};
     char buf[1024];
@@ -64,6 +68,9 @@ int main() {
 	printf("Duo UART started\n");
 	
 	char name[] = "foo.txt";
+	
+	fileCheck(name);
+	
     FILE * fp;
     int fd = open(name, O_RDWR | O_CREAT, 0777);
 	if (fd != -1) {
@@ -106,4 +113,31 @@ int main() {
     wiringXSerialClose(cfd);
 
     return 0;
+}
+
+void fileCheck(const char *fileName){
+
+    if(!access(fileName, F_OK )){
+        printf("The File %s\t was Found\n",fileName);
+    }else{
+        printf("The File %s\t not Found\n",fileName);
+    }
+
+    if(!access(fileName, R_OK )){
+        printf("The File %s\t can be read\n",fileName);
+    }else{
+        printf("The File %s\t cannot be read\n",fileName);
+    }
+
+    if(!access( fileName, W_OK )){
+        printf("The File %s\t it can be Edited\n",fileName);
+    }else{
+        printf("The File %s\t it cannot be Edited\n",fileName);
+    }
+
+    if(!access( fileName, X_OK )){
+        printf("The File %s\t is an Executable\n",fileName);
+    }else{
+        printf("The File %s\t is not an Executable\n",fileName);
+    }
 }
