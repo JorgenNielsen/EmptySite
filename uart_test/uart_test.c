@@ -46,6 +46,14 @@
 	root@46e322a49825:/workspace/jon-examples/EmptySite/uart_test# git pull origin master
 */
 
+/*
+
+camera:
+netsh interface portproxy add v4tov4 listenaddress=192.168.0.27 listenport=8554 connectaddress=192.168.42.1 connectport=8554
+
+rtsp://192.168.0.27:8554/stream0
+*/
+
 void fileCheck(const char *fileName);
 
 bool file_exists (char *filename) {
