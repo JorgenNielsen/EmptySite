@@ -35,7 +35,16 @@
 	CONTAINER ID   IMAGE                  COMMAND       CREATED      STATUS         PORTS     NAMES
 	46e322a49825   sophgo/tpuc_dev:v3.1   "/bin/bash"   2 days ago   Up 6 seconds             DuoTPU
 	PS C:\Users\JON.PC49> docker exec -it 46e322a49825 /bin/bash
-	root@46e322a49825:/workspace# ls
+	
+	root@46e322a49825:# 	
+	git clone https://github.com/milkv-duo/duo-buildroot-sdk
+	
+	root@46e322a49825:/workspace# 	
+	git clone https://github.com/milkv-duo/tpu-mlir.git   
+	git clone https://github.com/milkv-duo/duo-examples
+	git clone https://github.com/JorgenNielsen/EmptySite
+	git clone https://github.com/nihui/opencv-mobile
+	
 	duo-examples  jon-examples  tpu-mlir
 	root@46e322a49825:/workspace# cd jon-examples/
 	root@46e322a49825:/workspace/jon-examples# ls
@@ -49,7 +58,9 @@
 
 /*
 
+
 camera:
+netsh interface portproxy reset 
 netsh interface portproxy add v4tov4 listenaddress=192.168.0.27 listenport=8554 connectaddress=192.168.42.1 connectport=8554
 
 rtsp://192.168.0.27:8554/stream0
