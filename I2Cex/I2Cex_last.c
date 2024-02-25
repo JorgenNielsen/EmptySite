@@ -2,16 +2,14 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdint.h>
-#include <string.h>
 
 #include <wiringx.h>
 
 #define I2C_DEV "/dev/i2c-1"
 
-#define I2C_ADDR_RAM	0x50  // RAM
+#define I2C_ADDR 0x50  // RAM
 
-#define I2C_ADDR_SIM	0x55 // GYRO
-
+//#define I2C_ADDR 	0x55 // GYRO
 #define GYRO_CONFIG 0x1B
 
 typedef int bob;
@@ -100,6 +98,7 @@ void dumpEEPROM( int fd, int startaddress, int len)
 {
   // Define byte for received data
 	uint8_t rcvData = 0xFF;
+
  
 	wiringXI2CWrite(fd, (int)(startaddress >> 8));
 	wiringXI2CWrite(fd, (int)(startaddress & 0xFF));
@@ -112,21 +111,11 @@ void dumpEEPROM( int fd, int startaddress, int len)
 }
  
 
-//int main(void)
-int main ( int argc, char **argv )
+int main(void)
 {
     int fd_i2c;
     int data = 0;
 
-	int addr 	= I2C_ADDR_RAM;
-	
-	printf("argc %d\n", argc);
-	for (int i=0; i< argc; i++) {
-		printf("arg %d, %s\n",i, argv[i]);
-		if (strcmp(	argv[i], "sim") == 0) {
-			addr 	= I2C_ADDR_SIM;
-		}
-	}
 	// EEEPROM
 	// https://dronebotworkshop.com/eeprom-arduino/
 	// https://github.com/milkv-duo/duo-examples/blob/main/i2c/bmp280_i2c/bmp280_i2c.c
@@ -151,75 +140,14 @@ int main ( int argc, char **argv )
         return -1;
     }
 
-	
 
-    if ((fd_i2c = wiringXI2CSetup(I2C_DEV, addr)) <0) {
+    if ((fd_i2c = wiringXI2CSetup(I2C_DEV, I2C_ADDR)) <0) {
         printf("I2C Setup failed: %d\n", fd_i2c);
         wiringXGC();
         return -1;
     }
 
-	printf("I2C Setup: addr=0x%x handle=%d\n",addr,  fd_i2c);
-	
-	if (addr == I2C_ADDR_RAM) {			
-		dumpEEPROM(fd_i2c, 0, 127);
-		
-	} else {
-		
-	 	unsigned long commitId = 0;
-		commitId = 0xdbe7fbb7; // 1. version of sim
-		commitId = 0x225de63f;
-		
-		switch(commitId) {
-			case 0xdbe7fbb7: {
-				wiringXI2CWrite(fd_i2c, GYRO_CONFIG);
-				uint8_t GCValp  = wiringXI2CRead(fd_i2c);
-				//
-				wiringXI2CWriteReg8(fd_i2c, GYRO_CONFIG, 19);
-				
-				wiringXI2CWrite(fd_i2c, GYRO_CONFIG);
-				uint8_t GCValc  = wiringXI2CRead(fd_i2c);
-				
-				
-				printf("I2C read: %d = %d\n", GCValp, GCValc);		
-				
-				break;
-			}
-			case 0x225de63f: {
-				uint8_t GCValp = 0;
-				uint8_t GCValc = 0;
-				
-				//wiringXI2CWrite(fd_i2c, GYRO_CONFIG); // send one byte
-				
-				// GCValp  = wiringXI2CRead(fd_i2c);
-				
-				int rc = 0;
-				
-				//rc = wiringXI2CWriteReg8(fd_i2c, GYRO_CONFIG, 19);
-				//GCValc  = wiringXI2CRead(fd_i2c);
-				
-				/*
-				rc = wiringXI2CWriteReg16(fd_i2c, GYRO_CONFIG, 0x0E0F);	
-				printf("I2C write rc: %d\n", rc);					
-				for (int i=0; i< 1; i++)  {
-					GCValc  = wiringXI2CRead(fd_i2c);
-					printf("(%d) I2C read: %d\n", i, GCValc);
-				}
-				*/
-				
-				//wiringXI2CWrite(fd_i2c, GYRO_CONFIG);
-				// GCValc  = wiringXI2CRead(fd_i2c);
-				
-				
-				printf("I2C read: %d = %d\n", GCValp, GCValc);					
-				
-				dumpEEPROM(fd_i2c, 0, 12);
-				break;
-			}
-		}
-		
-	}
-	
+	printf("I2C Setup: addr=0x%x handle=%d\n",I2C_ADDR,  fd_i2c);
 	/*
 	for ( int i=0; i< 128; i++) {
 		 printf("I2C read: %d = %d\n", i, readEEPROM(fd_i2c, i));
@@ -231,11 +159,21 @@ int main ( int argc, char **argv )
 	//wiringXI2CWrite(fd_i2c, (int)(startaddress & 0xFF));
 	//wiringXI2CWrite(fd_i2c, 188);
 
-
+	
+	dumpEEPROM(fd_i2c, 0, 127);
 	
 	/*
 	
-
+	wiringXI2CWrite(fd_i2c, GYRO_CONFIG);
+	uint8_t GCValp  = wiringXI2CRead(fd_i2c);
+	//
+	wiringXI2CWriteReg8(fd_i2c, GYRO_CONFIG, 17);
+	
+	wiringXI2CWrite(fd_i2c, GYRO_CONFIG);
+	uint8_t GCValc  = wiringXI2CRead(fd_i2c);
+	
+	
+	printf("I2C read: %d = %d\n", GCValp, GCValc);
 	*/
 
 }

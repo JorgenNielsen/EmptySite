@@ -45,6 +45,10 @@
 	git clone https://github.com/JorgenNielsen/EmptySite
 	git clone https://github.com/nihui/opencv-mobile
 	
+    git config --global user.name "Jørgen Nielsen"
+    git config --global user.email jon@qnet.dk	
+	
+	
 	duo-examples  jon-examples  tpu-mlir
 	root@46e322a49825:/workspace# cd jon-examples/
 	root@46e322a49825:/workspace/jon-examples# ls
